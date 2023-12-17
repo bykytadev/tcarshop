@@ -1,10 +1,9 @@
 package com.project.tcarshop.exception;
 
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
-import org.springframework.context.MessageSource;
-import org.springframework.context.MessageSourceAware;
-import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,17 +16,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 @ControllerAdvice
-public class ErrorHandler extends ResponseEntityExceptionHandler implements MessageSourceAware {
-    private MessageSource messageSource;
-
-    @Override
-    public MessageSource getMessageSource() {
-        return messageSource;
-    }
-
-    private String getMessage(String code, Object... args) {
-        return messageSource.getMessage(code, args, LocaleContextHolder.getLocale());
-    }
+public class ErrorHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleException(Exception exception) {
@@ -40,14 +29,11 @@ public class ErrorHandler extends ResponseEntityExceptionHandler implements Mess
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException exception,
             HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-        var message = exception.getMessage();
-        var errors = new HashMap<String, String>();
-        for (FieldError error : exception.getFieldErrors()) {
-            var key = error.getField();
-            var value = error.getDefaultMessage();
-            errors.put(key, value);
-        }
-        var response = new ErrorResponse(message, errors);
+        List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
+        Map<String, String> errors = fieldErrors.stream()
+                .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
+
+        var response = new ErrorResponse(exception.getMessage(), errors);
         return new ResponseEntity<>(response, headers, status);
     }
 }
