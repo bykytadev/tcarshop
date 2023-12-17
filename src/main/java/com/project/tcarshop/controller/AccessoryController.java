@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,34 +22,35 @@ import com.project.tcarshop.service.IAccessoryService;
 import com.project.tcarshop.validation.AccessoryIdExists;
 
 import jakarta.validation.Valid;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Validated
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/accessories")
 @CrossOrigin(origins = "*")
 public class AccessoryController {
     private final IAccessoryService accessoryService;
 
-    @GetMapping("/api/v1/accessories")
+    @GetMapping
     public Page<AccessoryDto> findAll(Pageable pageable) {
         return accessoryService.findAll(pageable);
     }
 
-    @PostMapping("/api/v1/accessories")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public AccessoryDto create(@RequestBody @Valid AccessoryCreateForm form) {
         return accessoryService.create(form);
     }
 
-    @PutMapping("/api/v1/accessories/{id}")
+    @PutMapping("/{id}")
     public AccessoryDto update(
             @PathVariable("id") @AccessoryIdExists Long id,
             @RequestBody @Valid AccessoryUpdateForm form) {
         return accessoryService.update(id, form);
     }
 
-    @DeleteMapping("/api/v1/accessories/{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteById(@PathVariable("id") @AccessoryIdExists Long id) {
         accessoryService.deleteById(id);
