@@ -12,6 +12,6 @@ public class AccessoryIdExistsValidator implements ConstraintValidator<Accessory
 
     @Override
     public boolean isValid(Long id, ConstraintValidatorContext context) {
-        return accessoryRepository.existsById(id);
+        return id != null && accessoryRepository.existsById(id);
     }
 }
