@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.tcarshop.dto.AccessoryDto;
 import com.project.tcarshop.form.AccessoryCreateForm;
 import com.project.tcarshop.form.AccessoryUpdateForm;
+import com.project.tcarshop.response.AccessoryResponse;
 import com.project.tcarshop.service.IAccessoryService;
 import com.project.tcarshop.validation.AccessoryIdExists;
 
@@ -33,8 +34,12 @@ public class AccessoryController {
     private final IAccessoryService accessoryService;
 
     @GetMapping
-    public Page<AccessoryDto> findAll(Pageable pageable) {
-        return accessoryService.findAll(pageable);
+    public AccessoryResponse findAll(Pageable pageable) {
+        Page<AccessoryDto> accessoryPage = accessoryService.findAll(pageable);
+        AccessoryResponse accessoryResponse = new AccessoryResponse();
+        accessoryResponse.setAccessories(accessoryPage.getContent());
+        accessoryResponse.setTotalAccessories(accessoryPage.getTotalElements());
+        return accessoryResponse;
     }
 
     @PostMapping

@@ -18,6 +18,7 @@ import com.project.tcarshop.dto.CarDto;
 import com.project.tcarshop.entity.Car;
 import com.project.tcarshop.form.CarCreateForm;
 import com.project.tcarshop.form.CarUpdateForm;
+import com.project.tcarshop.response.CarResponse;
 import com.project.tcarshop.service.ICarService;
 import com.project.tcarshop.validation.CarPkExists;
 
@@ -33,8 +34,12 @@ public class CarController {
     private final ICarService carService;
 
     @GetMapping
-    public Page<CarDto> findAll(Pageable pageable) {
-        return carService.findAll(pageable);
+    public CarResponse findAll(Pageable pageable) {
+        Page<CarDto> carPage = carService.findAll(pageable);
+        CarResponse carResponse = new CarResponse();
+        carResponse.setCars(carPage.getContent());
+        carResponse.setTotalCars(carPage.getTotalElements());
+        return carResponse;
     }
 
     @PostMapping
