@@ -12,7 +12,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AccessoryDto {
-
     @NotNull(message = "ID cannot be null")
     private Long id;
 
