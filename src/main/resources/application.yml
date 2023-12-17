@@ -16,3 +16,20 @@ spring:
     init:
       mode: always
 
+  data:
+    web:
+      pageable:
+        default-page-size: 10
+        default-page-number: 0
+        one-indexed-parameters: true
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: debug
+    org.hibernate.orm.jdbc.bind: trace
+    org.hibernate.orm.jdbc.extract: trace
+
+
+# http://localhost:8080/swagger-ui/index.html
