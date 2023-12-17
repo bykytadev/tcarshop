@@ -7,9 +7,9 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,24 +21,23 @@ public class Car {
     @EmbeddedId
     private PrimaryKey pk;
 
-    @Column(name = "customer_name", length = 50, nullable = false)
+    @Column(name = "customer_name", nullable = false)
     private String customerName;
 
-    @Column(name = "catalog", length = 50, nullable = false)
+    @Column(name = "catalog", nullable = false)
     private String catalog;
 
-    @Column(name = "car_maker", length = 50, nullable = false)
+    @Column(name = "car_maker", nullable = false)
     private String carMaker;
 
-    @OneToMany(mappedBy = "car")
+    @OneToMany(mappedBy = "car", fetch = FetchType.LAZY)
     private List<Accessory> accessories;
 
     @Getter
     @Setter
-    @EqualsAndHashCode
     @Embeddable
     public static class PrimaryKey {
-        @Column(name = "license_plate", length = 10, nullable = false)
+        @Column(name = "license_plate", nullable = false)
         private String licensePlate;
 
         @Column(name = "repair_date", nullable = false)

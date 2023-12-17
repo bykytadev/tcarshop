@@ -5,6 +5,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -25,19 +26,19 @@ public class Accessory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", length = 50, nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(name = "price", nullable = false)
     private Long price;
 
-    @Column(name = "status_damaged", length = 50, nullable = false)
+    @Column(name = "status_damaged", nullable = false)
     private String statusDamaged;
 
-    @Column(name = "repair_status", length = 50, nullable = false)
+    @Column(name = "repair_status", nullable = false)
     private String repairStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumns({
             @JoinColumn(name = "license_plate", referencedColumnName = "license_plate", nullable = false),
             @JoinColumn(name = "repair_date", referencedColumnName = "repair_date", nullable = false)
